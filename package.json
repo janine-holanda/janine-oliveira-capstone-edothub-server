@@ -1,0 +1,16 @@
+{
+  "name": "janine-oliveira-capstone-edothub-server",
+  "version": "1.0.0",
+  "description": "E.Hub server",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch index.js"
+  },
+  "author": "Janine Oliveira",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}
