@@ -5,7 +5,7 @@ import orderRoutes from "./routes/order-routes.js";
 import "dotenv/config";
 
 const BACKEND_URL = process.env.BACKEND_URL;
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 5051;
 
 const app = express();
 
