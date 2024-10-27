@@ -15,7 +15,7 @@ router
 
 router
   .route("/:order_id/comments")
-  .get(orderController.fetchOrderMessages)
-  .post(orderController.addOrderMessage);
+  .get(orderController.fetchOrderComments)
+  .post(orderController.addOrderComment);
 
 export default router;

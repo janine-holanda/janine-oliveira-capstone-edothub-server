@@ -53,7 +53,7 @@ const addOrder = (req, res, next) => {
         pm_break_menu: req.body.service_options.pm_break_menu,
       },
       status: req.body.status,
-      timestamp: Date.now(),
+      created_timestamp: Date.now(),
     };
 
     const ordersList = readOrders();
@@ -168,28 +168,33 @@ const cancelOrder = (req, res, next) => {
   }
 };
 
-const fetchOrderMessages = (req, res, next) => {
+const fetchOrderComments = (req, res, next) => {
   try {
     const orderId = req.params.order_id;
     const commentsData = readComments();
-    const commentsList = commentsData.filter(
-      (comments) => comments.order_id === orderId
-    );
+    const commentsList = commentsData
+      .filter((comments) => comments.order_id === orderId)
+      .sort((a, b) => a.timestamp - b.timestamp);
 
-    if (!commentsList.length) {
-      return res
-        .status(404)
-        .json({ msg: `Comments with the id of ${orderId} was not found` });
-    }
+    const formatCommentsDate = commentsList.map((comment) => {
+      return {
+        ...comment,
+        timestamp: new Date(comment.timestamp).toLocaleString("en-US", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+        }),
+      };
+    });
 
-    res.status(200).json(commentsList);
+    res.status(200).json(formatCommentsDate);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error reading order data" });
   }
 };
 
-const addOrderMessage = (req, res, next) => {
+const addOrderComment = (req, res, next) => {
   try {
     const orderId = req.params.order_id;
     const newComment = {
@@ -219,6 +224,6 @@ export {
   fetchOrderDetails,
   updateOrder,
   cancelOrder,
-  fetchOrderMessages,
-  addOrderMessage,
+  fetchOrderComments,
+  addOrderComment,
 };
