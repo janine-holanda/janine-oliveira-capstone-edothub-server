@@ -15,7 +15,15 @@ function readComments() {
 const fetchOrdersList = (req, res, next) => {
   try {
     const ordersList = readOrders();
-    res.status(200).json(ordersList);
+
+    const formatEventDateToTimestamp = ordersList
+      .map((item) => ({
+        ...item,
+        event_date: Date.parse(item.event_date),
+      }))
+      .sort((a, b) => a.event_date - b.event_date);
+
+    res.status(200).json(formatEventDateToTimestamp);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error reading orders list data" });
@@ -176,18 +184,7 @@ const fetchOrderComments = (req, res, next) => {
       .filter((comments) => comments.order_id === orderId)
       .sort((a, b) => a.timestamp - b.timestamp);
 
-    const formatCommentsDate = commentsList.map((comment) => {
-      return {
-        ...comment,
-        timestamp: new Date(comment.timestamp).toLocaleString("en-US", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-        }),
-      };
-    });
-
-    res.status(200).json(formatCommentsDate);
+    res.status(200).json(commentsList);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error reading order data" });
